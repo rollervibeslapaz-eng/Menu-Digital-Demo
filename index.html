@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú Digital - Prueba</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary-color: #ff6b35; --secondary-color: #2c3e50; --background-color: #f8f9fa; --card-background: #ffffff; --text-color: #333333; --text-light: #666666; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--background-color); color: var(--text-color); line-height: 1.6; }
+        .header { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; text-align: center; padding: 2rem 1rem; }
+        .logo { font-size: 3rem; margin-bottom: 0.5rem; }
+        .restaurant-name { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .tagline { font-size: 1rem; opacity: 0.9; }
+        .categories-nav { display: flex; overflow-x: auto; gap: 0.5rem; padding: 1rem; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+        .category-btn { padding: 0.5rem 1rem; border: 2px solid var(--primary-color); background: white; color: var(--primary-color); border-radius: 20px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all 0.3s; }
+        .category-btn.active, .category-btn:hover { background: var(--primary-color); color: white; }
+        .menu-container { padding: 1rem; max-width: 1200px; margin: 0 auto; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+        .menu-item { background: var(--card-background); border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.3s; }
+        .menu-item:hover { transform: translateY(-5px); }
+        .menu-item-image { width: 100%; height: 200px; object-fit: cover; }
+        .menu-item-content { padding: 1rem; }
+        .menu-item-category { font-size: 0.75rem; color: var(--primary-color); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .menu-item-name { font-size: 1.25rem; font-weight: 700; margin: 0.5rem 0; color: var(--secondary-color); }
+        .menu-item-description { font-size: 0.9rem; color: var(--text-light); margin-bottom: 1rem; }
+        .menu-item-footer { display: flex; justify-content: space-between; align-items: center; }
+        .menu-item-price { font-size: 1.5rem; font-weight: 700; color: var(--primary-color); }
+        .order-btn { background: var(--primary-color); color: white; border: none; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; cursor: pointer; text-decoration: none; transition: background 0.3s; }
+        .order-btn:hover { background: var(--secondary-color); }
+        .whatsapp-float { position: fixed; bottom: 20px; right: 20px; background: #25d366; color: white; padding: 1rem 1.5rem; border-radius: 50px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); z-index: 1000; transition: transform 0.3s; }
+        .whatsapp-float:hover { transform: scale(1.05); }
+        .footer { background: var(--secondary-color); color: white; text-align: center; padding: 2rem 1rem; margin-top: 2rem; }
+        @media (max-width: 768px) { .menu-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">🍔</div>
+        <h1 class="restaurant-name">La Estación Burger</h1>
+        <p class="tagline">Las mejores hamburguesas de la ciudad</p>
+    </header>
+
+    <nav class="categories-nav">
+        <button class="category-btn active" onclick="renderMenu('todos')">Todos</button>
+        <button class="category-btn" onclick="renderMenu('hamburguesas')">Hamburguesas</button>
+        <button class="category-btn" onclick="renderMenu('snacks')">Snacks</button>
+        <button class="category-btn" onclick="renderMenu('bebidas')">Bebidas</button>
+    </nav>
+
+    <main class="menu-container">
+        <div id="menu-grid" class="menu-grid"></div>
+    </main>
+
+    <a href="https://wa.me/5215512345678?text=Hola,%20quiero%20hacer%20un%20pedido" class="whatsapp-float" target="_blank">💬 Pedir por WhatsApp</a>
+
+    <footer class="footer">
+        <p>📍 Av. Principal #123, Ciudad</p>
+        <p>🕐 Lun-Dom: 12:00 - 22:00</p>
+    </footer>
+
+    <script>
+        const menuData = [
+            { id: 1, name: "Hamburguesa Clásica", description: "Carne de res 150g, lechuga, tomate y salsa especial", price: 89, category: "hamburguesas", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400", available: true },
+            { id: 2, name: "Hamburguesa Doble Queso", description: "Doble carne, doble queso cheddar, tocino y salsa BBQ", price: 129, category: "hamburguesas", image: "https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=400", available: true },
+            { id: 3, name: "Papas Francesas", description: "Crujientes papas con sal de mar", price: 45, category: "snacks", image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400", available: true },
+            { id: 4, name: "Refresco", description: "Coca-Cola, Sprite o Fanta 355ml", price: 25, category: "bebidas", image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400", available: true }
+        ];
+
+        function renderMenu(category = 'todos') {
+            const menuGrid = document.getElementById('menu-grid');
+            menuGrid.innerHTML = '';
+            const filteredItems = category === 'todos' ? menuData : menuData.filter(item => item.category === category);
+            
+            filteredItems.forEach(item => {
+                if (!item.available) return;
+                const menuItem = document.createElement('div');
+                menuItem.className = 'menu-item';
+                menuItem.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}" class="menu-item-image">
+                    <div class="menu-item-content">
+                        <span class="menu-item-category">${item.category}</span>
+                        <h3 class="menu-item-name">${item.name}</h3>
+                        <p class="menu-item-description">${item.description}</p>
+                        <div class="menu-item-footer">
+                            <span class="menu-item-price">$${item.price}</span>
+                            <a href="https://wa.me/5215512345678?text=Hola,%20quiero%20pedir:%20${encodeURIComponent(item.name)}" class="order-btn" target="_blank">Pedir</a>
+                        </div>
+                    </div>
+                `;
+                menuGrid.appendChild(menuItem);
+            });
+        }
+        renderMenu();
+    </script>
+</body>
+</html>
